@@ -1,0 +1,77 @@
+package controllers
+
+import (
+	"net/http"
+	"strconv"
+
+	"github.com/gin-gonic/gin"
+	database "github.com/yoananp/car-rental-v1/database/sql_migration"
+	repository "github.com/yoananp/car-rental-v1/repositories"
+)
+
+func GetAllBooking(c *gin.Context) {
+	bookings, err := repository.GetAllBooking(database.DbConnection)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"bookings": bookings})
+}
+
+func InsertBooking(c *gin.Context) {
+	var booking database.Booking
+	if err := c.ShouldBindJSON(&booking); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Optional: cek apakah mobil bisa dibooking dulu
+	if err := repository.IsCarCanBooked(database.DbConnection, booking.CarID, booking.StartDate, booking.EndDate); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err := repository.InsertBooking(database.DbConnection, booking)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"result": "Booking inserted"})
+}
+
+func UpdateBooking(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid booking ID"})
+		return
+	}
+
+	var booking database.Booking
+	if err := c.ShouldBindJSON(&booking); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err = repository.UpdateBooking(database.DbConnection, booking, id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"result": "Booking updated"})
+}
+
+func DeleteBooking(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid booking ID"})
+		return
+	}
+
+	booking := database.Booking{ID: id}
+	err = repository.DeleteBooking(database.DbConnection, booking)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"result": "Booking deleted"})
+}
