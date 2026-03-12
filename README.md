@@ -4,6 +4,7 @@ Car Rental API built with Golang and PostgreSQL implementing CRUD operations for
 This system is designed to manage the car rental process in a structured way, including the management of customer data (Customers), vehicle data (Cars), and rental transactions (Bookings).
 
 A. Folder and File Structure
+   
     1. Config: Contains application configurations related to database connection:
         .env → stores environment variables for the database.
         config.go → loads the application configuration.
@@ -31,6 +32,7 @@ A. Folder and File Structure
     10. go.mod: The dependency management file in Golang that defines the project module, Go version, and all external packages used, ensuring the CAR RENTAL V1 API runs correctly.
 
 B. API Overview
+  
     1. Customers API: Manages customer data.
         POST /customers → add a new customer.
         GET /customers → retrieve all customers.
@@ -78,11 +80,12 @@ C. Database Structure and Relationships
             This table acts as a junction table between customers and cars, ensuring each transaction is clearly recorded: who rented, which car, rental period, cost, and status.
 
 Relationships and Data Flow
-    One Customer can create one or more bookings → one-to-many.
-    One Car can be rented multiple times by different customers at different periods → one-to-many.
-    The Bookings table serves as the central connector, recording all transactions, linking customer and car data, and tracking rental periods and booking status.
-    The overall relationship pattern: Customers → Bookings ← Cars, where Bookings is the core that manages the entire rental workflow.
+- One Customer can create one or more bookings → one-to-many.
+- One Car can be rented multiple times by different customers at different periods → one-to-many.
+- The Bookings table serves as the central connector, recording all transactions, linking customer and car data, and tracking rental periods and booking status.
+- The overall relationship pattern: Customers → Bookings ← Cars, where Bookings is the core that manages the entire rental workflow.
 
 
 Note: SQL/ERD and PostgreSQL differ because ERD is conceptual, representing entities, attributes, and relationships abstractly, whereas PostgreSQL is a real implementation requiring valid syntax, data types, auto-increment, foreign keys, and constraints. Therefore, ERD structures must be adjusted when applied to a live PostgreSQL database.
+
 
