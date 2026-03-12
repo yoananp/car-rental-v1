@@ -50,6 +50,7 @@ B. API Overview
         DELETE /bookings/:id → delete booking by ID.
 
 C. Database Structure and Relationships
+
     1. Customers: Stores customer data
         id → unique identifier.
         name → customer name.
@@ -84,3 +85,4 @@ Relationships and Data Flow
 
 
 Note: SQL/ERD and PostgreSQL differ because ERD is conceptual, representing entities, attributes, and relationships abstractly, whereas PostgreSQL is a real implementation requiring valid syntax, data types, auto-increment, foreign keys, and constraints. Therefore, ERD structures must be adjusted when applied to a live PostgreSQL database.
+
