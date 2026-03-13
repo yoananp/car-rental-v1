@@ -1,4 +1,4 @@
-CREATE TABLE (
+CREATE TABLE bookings(
     id INTEGER PRIMARY KEY,
     customer_id INT NOT NULL REFERENCES customers(id),
     car_id INT NOT NULL REFERENCES cars(id),
